@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\projectapi;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ProjectapiController extends Controller
 {
@@ -35,7 +36,22 @@ class ProjectapiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'firstname' => 'required|max:255',
+            'lastname' => 'required|max:255',
+            'email' => 'required|email|unique',
+            'studentid' => 'required|unique',
+            'contactno' => 'required|unique',
+    ]);
+        $post = new Projectapi;
+        $post->firstname = $request->firstname;
+        $post->lastname = $request->lastname;
+        $post->email = $request->email;
+        $post->studentid = $request->studentid;
+        $post->contactno = $request->contactno;
+        $post->save();
+
+        return redirect()->route('posts.show',$post->id );
     }
 
     /**
