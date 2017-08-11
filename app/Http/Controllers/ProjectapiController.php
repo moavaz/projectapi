@@ -44,7 +44,7 @@ class ProjectapiController extends Controller
             'email' => 'required|email|unique',
             'studentid' => 'required|unique',
             'contactno' => 'required|unique',
-    ]);
+            ]);
         $post = new Projectapi;
         $post->firstname = $request->firstname;
         $post->lastname = $request->lastname;
@@ -75,9 +75,11 @@ class ProjectapiController extends Controller
      * @param  \App\projectapi  $projectapi
      * @return \Illuminate\Http\Response
      */
-    public function edit(projectapi $projectapi)
+    public function edit($id/*projectapi $projectapi*/)
     {
         //
+        $post = Projectapi::find($id);
+        return $post;
     }
 
     /**
@@ -87,9 +89,24 @@ class ProjectapiController extends Controller
      * @param  \App\projectapi  $projectapi
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, projectapi $projectapi)
+    public function update(Request $request, $id/*projectapi $projectapi*/)
     {
-        //
+        //validate
+        $this->validate($request, [
+            'firstname' => 'required|max:255',
+            'lastname' => 'required|max:255',
+            'email' => 'required|email|unique',
+            'studentid' => 'required|unique',
+            'contactno' => 'required|unique',
+        ]);
+        $post = Projectapi::find($id);
+        $post->firstname = $request->input('firstname');
+        $post->lastname = $request->input('lastname');
+        $post->email = $request->input('email');
+        $post->studentid = $request->input('studentid');
+        $post->contactno = $request->input('contactno');
+        $post->save();
+        return redirect()->route('posts.show',$post->id );
     }
 
     /**
