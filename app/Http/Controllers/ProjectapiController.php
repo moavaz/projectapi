@@ -60,9 +60,11 @@ class ProjectapiController extends Controller
      * @param  \App\projectapi  $projectapi
      * @return \Illuminate\Http\Response
      */
-    public function show(projectapi $projectapi)
+    public function show($id)
     {
         //
+        $post = Projectapi::find($id);
+        return $post;
     }
 
     /**
