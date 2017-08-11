@@ -16,6 +16,8 @@ class ProjectapiController extends Controller
     public function index()
     {
         //
+        $post = Projectapi::all();
+        return $post;
     }
 
     /**
