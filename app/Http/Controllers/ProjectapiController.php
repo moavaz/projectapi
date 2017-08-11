@@ -115,8 +115,11 @@ class ProjectapiController extends Controller
      * @param  \App\projectapi  $projectapi
      * @return \Illuminate\Http\Response
      */
-    public function destroy(projectapi $projectapi)
+    public function destroy($id/*projectapi $projectapi*/)
     {
         //
+        $post = Projectapi::find($id);
+        $post->delete($id);
+        return redirect()->route('posts.index');
     }
 }
