@@ -17,7 +17,7 @@ class ProjectapiController extends Controller
     {
         //
         $post = Projectapi::all();
-        return $post;
+        return json_encode($post);
     }
 
     /**
@@ -38,22 +38,25 @@ class ProjectapiController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+       /* $this->validate($request, [
             'firstname' => 'required|max:255',
             'lastname' => 'required|max:255',
             'email' => 'required|email|unique',
             'studentid' => 'required|unique',
             'contactno' => 'required|unique',
-            ]);
+            ]); */
         $post = new Projectapi;
         $post->firstname = $request->firstname;
         $post->lastname = $request->lastname;
         $post->email = $request->email;
+        $post->image = $request->image;
         $post->studentid = $request->studentid;
         $post->contactno = $request->contactno;
         $post->save();
 
-        return redirect()->route('posts.show',$post->id );
+        if($post->save()){
+            return json_encode(array('Status is ' => true,'id'=> $post->id));
+        }
     }
 
     /**
@@ -65,8 +68,8 @@ class ProjectapiController extends Controller
     public function show($id)
     {
         //
-        $post = Projectapi::find($id);
-        return $post;
+        $post = Projectapi::findorFail($id);
+        return json_encode($id);
     }
 
     /**
@@ -78,8 +81,6 @@ class ProjectapiController extends Controller
     public function edit($id/*projectapi $projectapi*/)
     {
         //
-        $post = Projectapi::find($id);
-        return $post;
     }
 
     /**
@@ -92,21 +93,26 @@ class ProjectapiController extends Controller
     public function update(Request $request, $id/*projectapi $projectapi*/)
     {
         //validate
-        $this->validate($request, [
+     /*   $this->validate($request, [
             'firstname' => 'required|max:255',
             'lastname' => 'required|max:255',
             'email' => 'required|email|unique',
             'studentid' => 'required|unique',
             'contactno' => 'required|unique',
-        ]);
+        ]); */
         $post = Projectapi::find($id);
         $post->firstname = $request->input('firstname');
         $post->lastname = $request->input('lastname');
         $post->email = $request->input('email');
+        $post->image = $request->input('image');
         $post->studentid = $request->input('studentid');
         $post->contactno = $request->input('contactno');
         $post->save();
-        return redirect()->route('posts.show',$post->id );
+
+        if ($post->save()) {
+
+            return json_encode(array('Status is updated ' => true, 'id' => $post->id));
+        }
     }
 
     /**
@@ -118,8 +124,11 @@ class ProjectapiController extends Controller
     public function destroy($id/*projectapi $projectapi*/)
     {
         //
-        $post = Projectapi::find($id);
-        $post->delete($id);
-        return redirect()->route('posts.index');
+        $post = Projectapi::findorFail($id);
+        if($post->delete()){
+            return json_encode(array('status is'=>true,'id'=> $post->id));
+        }
+       /* $post->delete();
+        return redirect()::route('posts.index');*/
     }
 }

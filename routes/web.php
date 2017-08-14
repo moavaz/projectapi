@@ -13,4 +13,4 @@
 Route::get('/', function () {
     //return phpinfo();
 });
-Route::resource('posts','ProjectapiController');
+//Route::resource('posts','ProjectapiController');
